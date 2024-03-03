@@ -8,12 +8,19 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -28,22 +35,22 @@ public class SecurityConfig {
                 .build();
     }
 
+    //    Если создавать юзеров прям в памяти
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
+
+        UserDetails user = User.builder()
+                .passwordEncoder(new BCryptPasswordEncoder()::encode)
                 .username("user")
-                .password("123")
-//                .password("{bcrypt}$2y$10$ZulbJJR47Oy4raYlKnRxH.EJkUc/Iy2yRDp1UYxSozXRlR8mSEkCC") //123
+                .password("user")//{bcrypt}
                 .roles("USER")
                 .build();
-
-        UserDetails admin = User.withDefaultPasswordEncoder()
+        UserDetails admin = User.builder()
+                .passwordEncoder(new BCryptPasswordEncoder()::encode)
                 .username("admin")
-                .password("456")
-//                .password("{bcrypt}$2y$10$X6.sPBNmrPDMtu7PehpzbeMe1EhNgB7tId8mDEGt1jNuoFA1EAMKS") //456
-                .roles("ADMIN")
+                .password("admin")//{bcrypt}
+                .roles("ADMIN", "USER")
                 .build();
-
         return new InMemoryUserDetailsManager(user, admin);
     }
 }
