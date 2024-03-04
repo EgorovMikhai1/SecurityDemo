@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .build();
     }
 
-    //    Если создавать юзеров прям в памяти
+    //Если создавать юзеров прям в памяти
     @Bean
     public UserDetailsService userDetailsService() {
 
