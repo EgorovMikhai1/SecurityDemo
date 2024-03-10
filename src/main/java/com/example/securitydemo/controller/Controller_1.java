@@ -1,5 +1,8 @@
 package com.example.securitydemo.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +29,19 @@ public class Controller_1 {
     }
 
     @GetMapping("read_secret")
-    public String readSecret() {
+    public String readSecret(HttpServletRequest request) {
+        handleRequest(request);
         return "READ SECRET";
+    }
+
+    private void handleRequest(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            for (Cookie c : cookies) {
+                if("JSESSIONID".equals(c.getName())) {
+                    System.out.println("JSESSIONID: " + c.getValue());
+                }
+            }
+        }
     }
 }

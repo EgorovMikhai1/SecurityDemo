@@ -4,6 +4,7 @@ import com.example.securitydemo.entity.Role;
 import com.example.securitydemo.entity.User;
 import com.example.securitydemo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +24,6 @@ import static org.springframework.security.core.userdetails.User.withUsername;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     public final UserRepository userRepository;
-
 
     @Override
     @Transactional
